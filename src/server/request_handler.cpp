@@ -42,7 +42,10 @@ void SendResponse(ServiceHandler::ResultT &result,
 {
 
     current_reply.result(status);
-    current_reply.set("Access-Control-Allow-Origin", "*");
+    // SECURITY: CORS origin configurable via OSRM_CORS_ORIGIN env var.
+    // Default is '*' for public API compatibility, but restrict to specific origins in production.
+    const char* cors_origin = std::getenv("OSRM_CORS_ORIGIN");
+    current_reply.set("Access-Control-Allow-Origin", cors_origin ? cors_origin : "*");
     current_reply.set("Access-Control-Allow-Methods", "GET");
     current_reply.set("Access-Control-Allow-Headers", "X-Requested-With, Content-Type");
     if (std::holds_alternative<util::json::Object>(result))

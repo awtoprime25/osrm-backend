@@ -1,13 +1,13 @@
 #!/usr/bin/env node
 // Command execution timer - runs shell commands and logs execution time to file
 
-import { exec } from 'child_process';
+import { execFile } from 'child_process';
 import fs from 'fs';
 
 const name = process.argv[2];
-const cmd = process.argv.slice(3).join(' ');
+const args = process.argv.slice(3);
 const start = Date.now();
-exec(cmd, (err, stdout, stderr) => {
+execFile(args[0], args.slice(1), (err, stdout, stderr) => {
   if (err) {
     console.log(stdout);
     console.log(stderr);
